@@ -1,15 +1,15 @@
 import "./App.css";
-import ProductCard from "./components/ProductCard";
+import ProductCard from "../src/components/ProductCard"
 import { productList } from "./data";
 
 function App() {
-  const redenderProductList = productList.map(product => <ProductCard  key={product.id}/>)
+  const renderProductList = productList.map(product => <ProductCard  key={product.id} product={product}/>)
   return (
-    <div>
-      <div className="border-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2 p-2 m-5">
-        {redenderProductList}
+    <main className="container ">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 p-2 m-5 xl:grid-cols-4 rounded-md">
+        {renderProductList}
       </div>
-    </div>
+    </main>
   );
 }
 
