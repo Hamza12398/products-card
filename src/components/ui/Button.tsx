@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 interface IProps {
   className: string;
   children: ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 function Button({ children, className, ...rest }: IProps) {
