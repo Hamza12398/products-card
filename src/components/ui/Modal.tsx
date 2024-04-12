@@ -1,6 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import React, { ReactNode } from "react";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 
 interface IProp {
   isOpen: boolean;
