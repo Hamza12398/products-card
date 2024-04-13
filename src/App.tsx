@@ -1,32 +1,42 @@
 import "./App.css";
-import ProductCard from "../src/components/ProductCard";
-import Modal from "../src/components/ui/Modal";
+import ProductCard from "./components/ProductCard";
+import Modal from "./components/ui/Modal";
 import { formInputsList, productList } from "./data";
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import Button from "./components/ui/Button";
 import Input from "./components/ui/Input";
-import { HTMLInputElement } from "react";
+import React from "react";
+import { IProduct } from "./interfaces";
 
 
 export default function App() {
   // ! STATES
   const [isOpen, setIsOpen] = useState(false);
-  const [product, setProduct] = useState({
-    title: "",
+  const [product, setProduct] = useState<IProduct>({
+    title: "" ,
     price: "",
-    imageUrl: "",
     description: "",
+    imageURL: "",
+    colors: [],
+    category: {
+      name: "",
+      imageURL: "",
+    }
   });
   // ! STATES
 
   const closeModal = () => setIsOpen(false);
-  const openModal = () => setIsOpen(false);
+  const openModal = () => setIsOpen(true);
 
 
   const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.value);
-    // const { name, value } = event.target;
-    // setProduct({...product, [name]: value });
+    const { name, value } = event.target;
+    setProduct({...product, [name]: value });
+  }
+
+  const onsubmitHamdler = (event: FormEvent<HTMLFormElement>): void => {
+    throw new Error("Function not implemented.");
   }
 
   // ! RENDERING
@@ -40,6 +50,8 @@ export default function App() {
       <Input type="text" name={input.name} id={input.id} value={product[""]} onChange={onChangeHandler} />
     </div>
   ));
+
+
   // ! RENDERING
 
   return (
@@ -51,7 +63,7 @@ export default function App() {
         {renderProductList}
       </div>
       <Modal isOpen={isOpen} closeModal={closeModal} title="Product Details">
-        <form className="space-y-2">
+        <form className="space-y-2" onSubmit={onsubmitHamdler}>
           {renderFormInputList}
           <div className="flex items-center space-x-2">
             <Button className="bg-red-500 hover:bg-red-400">Submit</Button>
