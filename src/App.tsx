@@ -8,12 +8,9 @@ import Input from "./components/ui/Input";
 import React from "react";
 import { IProduct } from "./interfaces";
 
-
 export default function App() {
-  // ! STATES
-  const [isOpen, setIsOpen] = useState(false);
-  const [product, setProduct] = useState<IProduct>({
-    title: "" ,
+  const defaultProductObj = {
+    title: "",
     price: "",
     description: "",
     imageURL: "",
@@ -21,22 +18,29 @@ export default function App() {
     category: {
       name: "",
       imageURL: "",
-    }
-  });
+    },
+  };
+  // ! STATES
+  const [isOpen, setIsOpen] = useState(false);
+  const [product, setProduct] = useState<IProduct>(defaultProductObj);
   // ! STATES
 
   const closeModal = () => setIsOpen(false);
   const openModal = () => setIsOpen(true);
 
-
   const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
     const { name, value } = event.target;
-    setProduct({...product, [name]: value });
-  }
+    setProduct({ ...product, [name]: value });
+  };
 
   const onsubmitHamdler = (event: FormEvent<HTMLFormElement>): void => {
-    throw new Error("Function not implemented.");
+    event.preventDefault();
+    console.log(product);
+  };
+  const onCancel = (): void => {
+    console.log("cancelled")
+    setProduct(defaultProductObj);
+    closeModal();
   }
 
   // ! RENDERING
@@ -45,12 +49,17 @@ export default function App() {
   ));
   const renderFormInputList = formInputsList.map((input) => (
     // eslint-disable-next-line react/jsx-key
-    <div className="flex flex-col mb-2">
+    <div className="flex flex-col mb-2" key={product.id}>
       <label>{input.label}</label>
-      <Input type="text" name={input.name} id={input.id} value={product[""]} onChange={onChangeHandler} />
+      <Input
+        type="text"
+        name={input.name}
+        id={input.id}
+        value={product[""]}
+        onChange={onChangeHandler}
+      />
     </div>
   ));
-
 
   // ! RENDERING
 
@@ -68,8 +77,7 @@ export default function App() {
           <div className="flex items-center space-x-2">
             <Button className="bg-red-500 hover:bg-red-400">Submit</Button>
             <Button
-              className="bg-gray-700 hover:bg-gray-600"
-              onClick={closeModal}
+              className="bg-gray-700 hover:bg-gray-600" onClick={onCancel}
             >
               cancel
             </Button>
