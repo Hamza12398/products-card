@@ -29,7 +29,7 @@ export const productValidation = (product: {
   if (
     !product.description.trim() ||
     product.description.length < 10 ||
-    product.description.length > 80
+    product.description.length > 200
   ) {
     errors.description = "Title must be between 10 and 80 characters";
   }
@@ -37,9 +37,9 @@ export const productValidation = (product: {
   if (!product.imageURL.trim() || !validUrl) {
     errors.imageURL = "Invalid URL";
   }
-  if (!product.price.trim() || product.price.length < 0 || product.price.length > 10) {
-    errors.price = "Price must be between 0 and"
-  }
+  if(!product.price.trim() || isNaN(Number(product.price))) {
+    errors.price = "valid Price is required"
+  } 
 
   return errors;
 };

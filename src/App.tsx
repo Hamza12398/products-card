@@ -7,6 +7,8 @@ import Button from "./components/ui/Button";
 import Input from "./components/ui/Input";
 import React from "react";
 import { IProduct } from "./interfaces";
+import { productValidation } from "./validation";
+import ErrorMsg from "./components/ErrorMsg";
 
 export default function App() {
   const defaultProductObj = {
@@ -22,6 +24,12 @@ export default function App() {
   };
   // ! STATES
   const [isOpen, setIsOpen] = useState(false);
+  const [errors, setErrors] = useState({
+    title: "",
+    price: "",
+    description: "",
+    imageURL: "",
+  });
   const [product, setProduct] = useState<IProduct>(defaultProductObj);
   // ! STATES
 
@@ -31,17 +39,38 @@ export default function App() {
   const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setProduct({ ...product, [name]: value });
+    setErrors({ ...errors, [name]: "" });
   };
 
+  //! SUBMIT FORM
   const onsubmitHamdler = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    console.log(product);
+    const { title, description, price, imageURL } = product;
+    const errors = productValidation({ title, price, description, imageURL });
+    // console.log(errors);
+
+    //*IF ANY PROPORTY AND ALL PROPORTY HAS A VALUE */
+    const hasErrorMsg =
+      Object.values(errors).some((value) => value === "") &&
+      Object.values(errors).every((value) => value === "");
+    console.log(hasErrorMsg);
+
+    if (!hasErrorMsg) {
+      setErrors(errors);
+      return;
+    }
+    console.log("DONE");
   };
+  //! END SUBMIT FORM
+
+  //! CANCEL FORM
   const onCancel = (): void => {
-    console.log("cancelled")
+    console.log("cancelled");
     setProduct(defaultProductObj);
     closeModal();
-  }
+  };
+
+  //! END CANCEL FORM
 
   // ! RENDERING
   const renderProductList = productList.map((product) => (
@@ -58,6 +87,7 @@ export default function App() {
         value={product[""]}
         onChange={onChangeHandler}
       />
+      <ErrorMsg msg={errors[input.name]} />
     </div>
   ));
 
@@ -77,7 +107,8 @@ export default function App() {
           <div className="flex items-center space-x-2">
             <Button className="bg-red-500 hover:bg-red-400">Submit</Button>
             <Button
-              className="bg-gray-700 hover:bg-gray-600" onClick={onCancel}
+              className="bg-gray-700 hover:bg-gray-600"
+              onClick={onCancel}
             >
               cancel
             </Button>
