@@ -1,7 +1,7 @@
 import "./App.css";
 import ProductCard from "./components/ProductCard";
 import Modal from "./components/ui/Modal";
-import { formInputsList, productList } from "./data";
+import { colors, formInputsList, productList } from "./data";
 import { useState, ChangeEvent, FormEvent } from "react";
 import Button from "./components/ui/Button";
 import Input from "./components/ui/Input";
@@ -9,6 +9,8 @@ import React from "react";
 import { IProduct } from "./interfaces";
 import { productValidation } from "./validation";
 import ErrorMsg from "./components/ErrorMsg";
+import CircleColor from "./components/CircleColor";
+import { Diversity1 } from "@mui/icons-material";
 
 export default function App() {
   const defaultProductObj = {
@@ -90,6 +92,9 @@ export default function App() {
       <ErrorMsg msg={errors[input.name]} />
     </div>
   ));
+  const renderProductsColor = colors.map((color) => (
+    <CircleColor key={color} color={color} onClick={() => alert(color)}/>
+  ));
 
   // ! RENDERING
 
@@ -104,6 +109,9 @@ export default function App() {
       <Modal isOpen={isOpen} closeModal={closeModal} title="Product Details">
         <form className="space-y-2" onSubmit={onsubmitHamdler}>
           {renderFormInputList}
+          <div className="flex items-center my-4 space-x-2 ">
+          {renderProductsColor}
+        </div>
           <div className="flex items-center space-x-2">
             <Button className="bg-red-500 hover:bg-red-400">Submit</Button>
             <Button

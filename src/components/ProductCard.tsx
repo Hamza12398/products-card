@@ -19,11 +19,7 @@ const ProductCard = ({product}: IProp) => {
       <h3>{product.title}</h3>
       <p>{txtSlice(product.description)}</p>
 
-      <div className="flex items-center my-4 space-x-2 ">
-        <span className="w-5 h-5 bg-red-500 rounded-full  cursor-pointer" />
-        <span className="w-5 h-5 bg-orange-500 rounded-full cursor-pointer" />
-        <span className="w-5 h-5 bg-blue-500 rounded-full cursor-pointer" />
-      </div>
+     
 
       <div className="flex items-center justify-between m-2">
         <span>250.000$</span>
