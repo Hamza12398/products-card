@@ -10,7 +10,7 @@ import { IProduct } from "./interfaces";
 import { productValidation } from "./validation";
 import ErrorMsg from "./components/ErrorMsg";
 import CircleColor from "./components/CircleColor";
-import { Diversity1 } from "@mui/icons-material";
+import { v4 as uuid } from "uuid";
 
 export default function App() {
   const defaultProductObj = {
@@ -32,7 +32,10 @@ export default function App() {
     description: "",
     imageURL: "",
   });
+  const [products, setProducts] = useState<IProduct[]>(productList);
   const [product, setProduct] = useState<IProduct>(defaultProductObj);
+  const [tempCColor, setTempCColor] = useState<string[]>([]);
+  // console.log(tempCColor);
   // ! STATES
 
   const closeModal = () => setIsOpen(false);
@@ -61,7 +64,12 @@ export default function App() {
       setErrors(errors);
       return;
     }
-    console.log("DONE");
+    //? ADD A NEW POST */
+    setProducts(prev => [...prev, {...product, id: uuid() , colors: tempCColor}]);
+    setProduct(defaultProductObj);
+    setTempCColor([])
+    closeModal();
+
   };
   //! END SUBMIT FORM
 
@@ -75,7 +83,7 @@ export default function App() {
   //! END CANCEL FORM
 
   // ! RENDERING
-  const renderProductList = productList.map((product) => (
+  const renderProductList = products.map((product) => (
     <ProductCard key={product.id} product={product} />
   ));
   const renderFormInputList = formInputsList.map((input) => (
@@ -93,16 +101,28 @@ export default function App() {
     </div>
   ));
   const renderProductsColor = colors.map((color) => (
-    <CircleColor key={color} color={color} onClick={() => alert(color)}/>
+    <CircleColor
+      key={color}
+      color={color}
+      onClick={() => {
+        if (tempCColor.includes(color)) {
+          setTempCColor(tempCColor.filter((item) => item !== color));
+          return;
+        }
+        setTempCColor((prev) => [...prev, color]);
+      }}
+    />
   ));
 
   // ! RENDERING
 
   return (
     <main className="container">
-      <Button className="bg-red-500" onClick={openModal}>
-        Add
-      </Button>
+      <div className="">
+        <Button className="bg-red-500" onClick={openModal}>
+          Add
+        </Button>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 p-2 m-5 xl:grid-cols-4 rounded-md">
         {renderProductList}
       </div>
@@ -110,8 +130,19 @@ export default function App() {
         <form className="space-y-2" onSubmit={onsubmitHamdler}>
           {renderFormInputList}
           <div className="flex items-center my-4 space-x-2 ">
-          {renderProductsColor}
-        </div>
+            {renderProductsColor}
+          </div>
+          <div className="flex items-center my-4 space-x-2 ">
+            {tempCColor.map((color) => (
+              <span
+                className="p-1 mr-1 mb-1 text-white text-xs rounded-md"
+                style={{ backgroundColor: color }}
+                key={color}
+              >
+                {color}
+              </span>
+            ))}
+          </div>
           <div className="flex items-center space-x-2">
             <Button className="bg-red-500 hover:bg-red-400">Submit</Button>
             <Button
