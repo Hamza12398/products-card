@@ -118,9 +118,9 @@ export default function App() {
 
   return (
     <main className="container">
-      <div className="">
+      <div className="flex justify-center m-10">
         <Button className="bg-red-500" onClick={openModal}>
-          Add
+          Add PRODUCT
         </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 p-2 m-5 xl:grid-cols-4 rounded-md">
